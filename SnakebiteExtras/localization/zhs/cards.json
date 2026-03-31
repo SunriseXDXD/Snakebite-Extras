@@ -1,0 +1,14 @@
+{
+  "SNAKEBITE_FORM.description": "当你打出牌时，将其[gold]变化[/gold]为蛇咬",
+  "SNAKEBITE_FORM.title": "蛇咬形态",
+  "SNAKEBITE_STORM.description": "丢弃你的所有手牌，将等量的蛇咬加入你的手牌",
+  "SNAKEBITE_STORM.title": "蛇咬风暴",
+  "SNAKEBITE_DOWN.description": "当你打出蛇咬时，抽两张牌",
+  "SNAKEBITE_DOWN.title": "蛇咬下山",
+  "SNAKEBITE_UP.description": "所有队友抽{Cards:diff()}张牌，将抽上来的牌[gold]变化[/gold]为蛇咬",
+  "SNAKEBITE_UP.title": "抱蛇",
+  "SNAKEBITE_LANDING.description": "对所有敌人造成{Damage:diff()}点伤害，用蛇咬填满所有队友的手牌",
+  "SNAKEBITE_LANDING.title": "蛇降",
+  "SNAKEBITE_TRAP.description": "免费打出弃牌堆中的所有蛇咬",
+  "SNAKEBITE_TRAP.title": "蛇咬陷阱"
+}
