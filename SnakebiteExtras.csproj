@@ -1,9 +1,18 @@
 <Project Sdk="Godot.NET.Sdk/4.5.1">
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+
+    <!-- 👉 修改成你的游戏 mod 目录 -->
+    <ModDeployDir>D:\SteamLibrary\steamapps\common\Slay the Spire 2\mods</ModDeployDir>
+
+    <!-- 👉 Godot 路径 -->
+    <GodotExe>D:\Godot_v4.5.1-stable_mono_win64\Godot_v4.5.1-stable_mono_win64.exe</GodotExe>
+
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>libs\0Harmony.dll</HintPath>
@@ -13,13 +22,61 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="CopyCustomOutput" AfterTargets="Build">
+  <!-- ✅ 1️⃣ 统一输出到 build -->
+  <Target Name="CopyToBuildDir" AfterTargets="Build">
     <ItemGroup>
-      <OutputDlls Include="$(OutputPath)\$(AssemblyName).dll" />
-      <OutputDlls Include="$(OutputPath)\$(AssemblyName).pdb" />
+      <OutputFiles Include="$(OutputPath)\$(AssemblyName).dll" />
+      <OutputFiles Include="$(OutputPath)\$(AssemblyName).pdb" />
     </ItemGroup>
 
     <MakeDir Directories="$(MSBuildProjectDirectory)\build" />
-    <Copy SourceFiles="@(OutputDlls)" DestinationFolder="$(MSBuildProjectDirectory)\build" />
+
+    <Copy 
+      SourceFiles="@(OutputFiles)" 
+      DestinationFolder="$(MSBuildProjectDirectory)\build"
+      SkipUnchangedFiles="false" />
+  </Target>
+
+  <Target Name="ExportPck" 
+        AfterTargets="CopyToBuildDir"
+        Condition="'$(BuildingInsideGodot)' != 'true'">
+
+  <Exec 
+    Command='"$(GodotExe)" --headless --no-dotnet --export-pack "Windows Desktop" "$(MSBuildProjectDirectory)\build\$(AssemblyName).pck"' 
+    IgnoreExitCode="true" />
+
+  <!-- 防止假成功 -->
+  <Error 
+    Condition="!Exists('$(MSBuildProjectDirectory)\build\$(AssemblyName).pck')" 
+    Text="Godot export failed." />
+
 </Target>
+
+  <!-- ✅ 3️⃣ 部署到游戏目录（强制覆盖） -->
+  <Target Name="DeployMod" AfterTargets="ExportPck">
+
+    <!-- 创建目录 -->
+    <MakeDir Directories="$(ModDeployDir)" />
+
+    <!-- DLL -->
+    <Copy 
+      SourceFiles="$(MSBuildProjectDirectory)\build\$(AssemblyName).dll"
+      DestinationFolder="$(ModDeployDir)"
+      OverwriteReadOnlyFiles="true" />
+
+    <!-- PDB（可选） -->
+    <Copy 
+      SourceFiles="$(MSBuildProjectDirectory)\build\$(AssemblyName).pdb"
+      DestinationFolder="$(ModDeployDir)"
+      OverwriteReadOnlyFiles="true"
+      Condition="Exists('$(MSBuildProjectDirectory)\build\$(AssemblyName).pdb')" />
+
+    <!-- PCK -->
+    <Copy 
+      SourceFiles="$(MSBuildProjectDirectory)\build\$(AssemblyName).pck"
+      DestinationFolder="$(ModDeployDir)"
+      OverwriteReadOnlyFiles="true" />
+
+  </Target>
+
 </Project>

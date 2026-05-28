@@ -15,12 +15,15 @@ namespace SnakebiteExtras.Cards;
 
 public class SnakebiteLanding : CardModel
 {
+    public override List<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Retain
+    ];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Snakebite>()];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(21m, ValueProp.Move)];
 
     public SnakebiteLanding()
-        : base(1, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
+        : base(2, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
     {
     }
 

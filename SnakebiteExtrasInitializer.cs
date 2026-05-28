@@ -17,6 +17,8 @@ namespace SnakebiteExtras
             ModHelper.AddModelToPool(typeof(SilentCardPool), typeof(SnakebiteUp));
             ModHelper.AddModelToPool(typeof(SilentCardPool), typeof(SnakebiteLanding));
             ModHelper.AddModelToPool(typeof(SilentCardPool), typeof(SnakebiteTrap));
+            ModHelper.AddModelToPool(typeof(SilentCardPool), typeof(SnakebiteCry));
+            ModHelper.AddModelToPool(typeof(SilentCardPool), typeof(SnakebiteHang));
             Log.Info("SnakebiteExtras - 加载成功!");
         }
     }
